@@ -30,6 +30,25 @@ def prob(contest, problem):
             s=s[:100*(i+1)]+"\n"+s[100*(i+1):]
         cfFile.write(s)
         cfFile.write('\n')
+        codeFile = open(problem+".cpp",'w')
+        codeFile.write(r'''#include <bits/stdc++.h>
+using namespace std;
+
+void solve(){
+
+}
+
+int main(){
+int t;
+cin >> t;
+while(t--){
+    solve();
+}
+return 0;
+}''')   
+        codeFile.close()
+
+
 
     inp = par.select('div[class="input"]')
     cfFile.write(inp[0].text)
