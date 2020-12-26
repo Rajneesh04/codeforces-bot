@@ -51,9 +51,11 @@ return 0;
 
 
     inp = par.select('div[class="input"]')
+    cfFile.write("\n")
     cfFile.write(inp[0].text)
 
     out = par.select('div[class="output"]')
+    cfFile.write("\n")
     cfFile.write(out[0].text)
     cfFile.close()
 
@@ -71,10 +73,16 @@ soup = bs4.BeautifulSoup(res.text, features="html.parser")
 
 linkElems = soup.select('div[class="datatable"]')
 links = linkElems[0].findAll('a')
-tempc = ''
+tempc = ""
 for link in links:
     s = link.get('href')
-    c = s[-1]
-    if(tempc != c):
-        prob(''.join(sys.argv[1:]),c)
-    tempc = c
+    i=-1
+    c=s[i]
+    while c!='/':
+        i-=1
+        c=s[i]
+    i+=1
+    problem = s[i:]
+    if(tempc != problem):
+        prob(''.join(sys.argv[1:]),problem)
+    tempc = problem
