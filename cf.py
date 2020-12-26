@@ -69,6 +69,14 @@ if not os.path.exists(final_dir):
     os.makedirs(final_dir)
 os.chdir(final_dir)
 res.raise_for_status()
+
+shFile = open("cp.sh",'w')
+shFile.write(r'''#!/bin/bash
+FILE="$1"
+g++ $FILE -o CPP
+./CPP
+''')
+
 soup = bs4.BeautifulSoup(res.text, features="html.parser")
 
 linkElems = soup.select('div[class="datatable"]')
