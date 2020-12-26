@@ -8,7 +8,7 @@ HOW TO USE THIS BOT:
 It will make a folder in your current working directory and put all the problems in that as text files.
 It also makes a shell script to run c++ code.
 
-HOW TO RUN YOUR C++ CODE:
+HOW TO RUN YOUR C++ CODE:(For Linux users only)
 1. navigate tp the folder where all the files are present
 2. run this command to give permission to the shell script( "chmod +x cp.sh" )
 3. run cp.sh with system argument as the cpp file name. (ex: "./cp.sh A.cpp")
