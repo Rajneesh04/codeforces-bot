@@ -18,20 +18,18 @@ def prob(contest, problem):
     soup = bs4.BeautifulSoup(res.text, features="html.parser")
     linkElems = soup.select('div[class="problem-statement"]')
     par = linkElems[0]
-    pars = par.findAll('p')
+    s = rem(par.text)
+    s=s[s.find("standard output")+len("standard output"):]
     cfFile = open(problem+'.txt', 'w')
     cfFile.write("\n"+problem+"\n\n")
-    for x in pars:
-        s=x.text
-        s=rem(s)
-        n = len(s)
-        n = int(n/100)
-        for i in range(n):
-            s=s[:100*(i+1)]+"\n"+s[100*(i+1):]
-        cfFile.write(s)
-        cfFile.write('\n')
-        codeFile = open(problem+".cpp",'w')
-        codeFile.write(r'''#include <bits/stdc++.h>
+    n = len(s)
+    n = int(n/100)
+    for i in range(n):
+        s=s[:100*(i+1)]+"\n"+s[100*(i+1):]
+    cfFile.write(s)
+    cfFile.write('\n')
+    codeFile = open(problem+".cpp",'w')
+    codeFile.write(r'''#include <bits/stdc++.h>
 using namespace std;
 
 void solve(){
@@ -46,18 +44,8 @@ while(t--){
 }
 return 0;
 }''')   
-        codeFile.close()
+    codeFile.close()
 
-
-
-    inp = par.select('div[class="input"]')
-    cfFile.write("\n")
-    cfFile.write(inp[0].text)
-
-    out = par.select('div[class="output"]')
-    cfFile.write("\n")
-    cfFile.write(out[0].text)
-    cfFile.close()
 
 
 res = requests.get(''.join(sys.argv[1:]))
