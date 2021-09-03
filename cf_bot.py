@@ -13,26 +13,46 @@ def copyTemplate(copy_to_file, template_file):
                 secondFile.write(line)
 
 def createProblemFiles(contest_url, problem_id, template_file_dir):
+    #creating a folder with name as that of problem_id
+    problem_dir = os.path.join(os.getcwd(), problem_id)
+    if not os.path.exists(problem_dir):
+        os.makedirs(problem_dir)
+    os.chdir(problem_dir)
+
     problem_url = contest_url + "/problem/" + problem_id
     response = getContentFromCodeforces(problem_url)
     soup = bs4.BeautifulSoup(response.text, features="html.parser")
-    sample_test = soup.find(class_='sample-test').get_text()
-    sample_test_file = open(problem_id + '_tests.txt', 'w')
-    sample_test_file.write(sample_test)
-    sample_test_file.close()
-    copyTemplate(problem_id+'.cpp', template_file_dir)
-    # linkElems = soup.select('div div[class="sample-tests"]')
-    # print(soup.find(class_='sample-test').get_text())
-    # print(linkElems)
+
+    #input test file
+    sample_input = soup.find(class_='input').get_text()
+    #to remove first line
+    sample_input = sample_input[6:]
+    sample_input_file = open('input.txt', 'w')
+    sample_input_file.write(sample_input)
+    sample_input_file.close()
+
+    #output test file
+    sample_output = soup.find(class_='output').get_text()
+    #to remove first line
+    sample_output = sample_output[7:]
+    sample_output_file = open('out.txt', 'w')
+    sample_output_file.write(sample_output)
+    sample_output_file.close()
+
+    copyTemplate(problem_id+'.cpp', os.path.join(template_file_dir+'/template.cpp'))
+    #back to contest folder
+    os.chdir('..')
 
 
 #taking input
 contest_url = ''.join(sys.argv[1])
-template_file_dir = ''.join(sys.argv[2])
+
 #extracting contest id for folder name from url
 folder_name = contest_url[contest_url.rindex("/")+1:]
 
 current_dir = os.getcwd()
+#template.cpp should be present in the directory where python script is present
+template_file_dir = current_dir
 final_dir = os.path.join(current_dir, folder_name)
 if not os.path.exists(final_dir):
     os.makedirs(final_dir)
@@ -52,6 +72,4 @@ for link in links:
     problem_id = problem_url[problem_url.rindex("/")+1:]
     if(previous_id != problem_id):
         createProblemFiles(contest_url, problem_id, template_file_dir)
-
-    # print(s)
-# print(links)
+    previous_id = problem_id
